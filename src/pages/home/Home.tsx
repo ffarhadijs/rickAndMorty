@@ -1,10 +1,16 @@
-const Home = () => {
+import { Stack } from "@mui/material";
+import Favorite from "../../components/favorite/Favorite";
+import Filter from "../../components/filter/Filter";
+import ProductList from "../../components/productsList/ProductsList";
 
-    return(
-        <div>
-            
-        </div>
-    )
+const Home = () => {
+  return (
+    <Stack direction={"row"} justifyContent={"space-between"}>
+      <Filter />
+      <ProductList />
+      <Favorite />
+    </Stack>
+  );
 };
 
 export default Home;
