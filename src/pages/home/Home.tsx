@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Pagination, Box } from "@mui/material";
 import axios from "axios";
 import { useState, useContext } from "react";
 import { useQuery } from "react-query";
@@ -42,7 +42,23 @@ const Home = () => {
       </Grid>
       <Grid item xs={state.favoriteList.length > 0 ? 7 : 9.5}>
         {status === "success" && (
-          <ProductList data={data} setPageNum={setPageNum} />
+          <>
+            <ProductList data={data} />
+            <Box display={"flex"} flexDirection={"row"} justifyContent="center">
+              <Pagination
+                size="large"
+                sx={{
+                  display: "inline-block",
+                  padding: "20px 0px",
+                }}
+                page={pageNum}
+                count={data?.data.info.pages}
+                onChange={(event: React.ChangeEvent<unknown>, page: number) =>
+                  setPageNum(page)
+                }
+              />
+            </Box>
+          </>
         )}
         {status === "loading" && (
           <Typography variant="body1" textAlign={"center"}>
