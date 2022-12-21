@@ -6,15 +6,55 @@ import {
   RadioGroup,
   TextField,
   Typography,
+  Button,
 } from "@mui/material";
 
-const Filter = () => {
+type FilterProps = {
+  searchParams: URLSearchParams;
+  setSearchParams: React.Dispatch<React.SetStateAction<any>>;
+};
+
+const statusFormControl = [
+  { value: "Alive", label: "Alive" },
+  { value: "Dead", label: "Dead" },
+  { value: "Unknown", label: "Unknown" },
+];
+
+const genderFormControl = [
+  { value: "Female", label: "Female" },
+  { value: "Male", label: "Male" },
+  { value: "Genderless", label: "Genderless" },
+  { value: "Unknown", label: "Unknown" },
+];
+
+const Filter = (props: FilterProps) => {
+  const changeHandler = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (e.target.value) {
+      props.searchParams.set(e.target.name, e.target.value);
+      props.setSearchParams(props.searchParams);
+    } else {
+      props.setSearchParams({});
+    }
+  };
+  const resetFiltersHandler = () => {
+    if (props.searchParams.get("name")) {
+      props.searchParams.delete("name");
+    }
+    if (props.searchParams.get("status")) {
+      props.searchParams.delete("status");
+    }
+    if (props.searchParams.get("gender")) {
+      props.searchParams.delete("gender");
+    }
+    props.setSearchParams(props.searchParams);
+  };
   return (
     <Box
       bgcolor={"#CCD1D9"}
-      width={"300px"}
-      minHeight={"100vh"}
       p={"20px"}
+      height={"100%"}
       display={"flex"}
       flexDirection={"column"}
       rowGap={"30px"}
@@ -32,10 +72,12 @@ const Filter = () => {
         Rick and Morty
       </Typography>
       <Box>
-        <FormLabel id="name" sx={{ color: "#434A54" }}>
+        <FormLabel id="name" sx={{ color: "#434A54", fontWeight: "bold" }}>
           Name
         </FormLabel>
         <TextField
+          value={props.searchParams.get("name") || ""}
+          onChange={changeHandler}
           name="name"
           aria-labelledby="name"
           variant={"outlined"}
@@ -45,73 +87,50 @@ const Filter = () => {
         />
       </Box>
       <Box>
-        <FormLabel id="status" sx={{ color: "#434A54" }}>
+        <FormLabel id="status" sx={{ color: "#434A54", fontWeight: "bold" }}>
           Status
         </FormLabel>
-        <RadioGroup aria-labelledby="status">
-          <FormControlLabel
-            sx={{ height: "30px" }}
-            value=""
-            control={<Radio size="small" />}
-            label="All"
-          />
-          <FormControlLabel
-            sx={{ height: "30px" }}
-            value="Alive"
-            control={<Radio size="small" />}
-            label="Alive"
-          />
-          <FormControlLabel
-            sx={{ height: "30px" }}
-            value="Dead"
-            control={<Radio size="small" />}
-            label="Dead"
-          />
-          <FormControlLabel
-            sx={{ height: "30px" }}
-            value="Unknown"
-            control={<Radio size="small" />}
-            label="Unknown"
-          />
+        <RadioGroup
+          aria-labelledby="status"
+          name="status"
+          onChange={changeHandler}
+        >
+          {statusFormControl.map((item, index) => (
+            <FormControlLabel
+              key={index}
+              sx={{ height: "30px" }}
+              value={item.value}
+              checked={props.searchParams.get("status") == item.value}
+              control={<Radio size="small" />}
+              label={item.label}
+            />
+          ))}
         </RadioGroup>
       </Box>
       <Box>
-        <FormLabel id="gender" sx={{ color: "#434A54" }}>
+        <FormLabel id="gender" sx={{ color: "#434A54", fontWeight: "bold" }}>
           Gender
         </FormLabel>
-        <RadioGroup aria-labelledby="gender">
-          <FormControlLabel
-            sx={{ height: "30px" }}
-            value=""
-            control={<Radio size="small" />}
-            label="All"
-          />
-          <FormControlLabel
-            sx={{ height: "30px" }}
-            value="Female"
-            control={<Radio size="small" />}
-            label="Female"
-          />
-          <FormControlLabel
-            sx={{ height: "30px" }}
-            value="Male"
-            control={<Radio size="small" />}
-            label="Male"
-          />
-          <FormControlLabel
-            sx={{ height: "30px" }}
-            value="Genderless"
-            control={<Radio size="small" />}
-            label="Genderless"
-          />
-          <FormControlLabel
-            sx={{ height: "30px" }}
-            value="Unknown"
-            control={<Radio size="small" />}
-            label="Unknown"
-          />
+        <RadioGroup
+          aria-labelledby="gender"
+          name="gender"
+          onChange={changeHandler}
+        >
+          {genderFormControl.map((item, index) => (
+            <FormControlLabel
+              key={index}
+              sx={{ height: "30px" }}
+              value={item.value}
+              checked={props.searchParams.get("gender") === item.value}
+              control={<Radio size="small" />}
+              label={item.label}
+            />
+          ))}
         </RadioGroup>
       </Box>
+      <Button variant={"contained"} onClick={resetFiltersHandler}>
+        Reset Filters
+      </Button>
     </Box>
   );
 };
