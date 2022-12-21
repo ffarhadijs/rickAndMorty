@@ -42,7 +42,7 @@ const ProductDetails = () => {
             fontWeight: "900",
           }}
         >
-          Filter
+          Rick and Morty
         </Typography>
       </Grid>
       <Grid item p={4} xs={6}>
