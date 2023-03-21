@@ -12,6 +12,8 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { FavoriteContext } from "../../contexts/FavoriteContext";
 import { useContext } from "react";
+import { FC } from "react";
+import { IProductProps } from "../productsList/ProductsList";
 
 const CardContentNoPadding = styled(CardContent)(`
   padding: 8px;
@@ -19,19 +21,20 @@ const CardContentNoPadding = styled(CardContent)(`
     padding-bottom: 0;
   }
 `);
-type ProductProps = {
-  item: any;
-};
-const Product = (props: ProductProps) => {
+
+interface IProps {
+  item: IProductProps;
+}
+const Product: FC<IProps> = ({ item }) => {
   const { state, dispatch } = useContext(FavoriteContext);
 
   return (
     <Card>
-      <Link to={`/${props.item.id}`}>
+      <Link to={`/${item.id}`}>
         <CardMedia
           component="img"
           height="180"
-          image={props.item.image}
+          image={item.image}
           alt="avatar"
         />
         <CardContentNoPadding>
@@ -43,25 +46,25 @@ const Product = (props: ProductProps) => {
               minHeight: "50px",
             }}
           >
-            {props.item.name}
+            {item.name}
           </Typography>
           <Stack flexDirection={"row"} justifyContent={"space-between"}>
             <Typography variant="body1" sx={{ fontSize: "14px" }}>
-              {props.item.gender}
+              {item.gender}
             </Typography>
             <Typography
               variant="body1"
               sx={{
                 fontSize: "14px",
                 color:
-                  props.item.status === "Dead"
+                  item.status === "Dead"
                     ? "red"
-                    : props.item.status === "Alive"
+                    : item.status === "Alive"
                     ? "green"
                     : "black",
               }}
             >
-              {props.item.status}
+              {item.status}
             </Typography>
           </Stack>
         </CardContentNoPadding>
@@ -70,16 +73,14 @@ const Product = (props: ProductProps) => {
         color="error"
         onClick={() =>
           dispatch({
-            type: state.favoriteList.find(
-              (object) => object.id === props.item.id
-            )
+            type: state.favoriteList.find((object) => object.id === item.id)
               ? "REMOVE"
               : "ADD",
-            payload: props.item,
+            payload: item,
           })
         }
       >
-        {state.favoriteList.find((object) => object.id === props.item.id) ? (
+        {state.favoriteList.find((object) => object.id === item.id) ? (
           <FavoriteIcon />
         ) : (
           <FavoriteBorderIcon />
