@@ -7,12 +7,11 @@ import {
   TextField,
   Typography,
   Button,
+  IconButton,
 } from "@mui/material";
-
-type FilterProps = {
-  searchParams: URLSearchParams;
-  setSearchParams: React.Dispatch<React.SetStateAction<any>>;
-};
+import { useContext, Fragment } from "react";
+import { SearchParams } from "../../contexts/SearchParamsContextProvider";
+import CloseIcon from "@mui/icons-material/Close";
 
 const statusFormControl = [
   { value: "Alive", label: "Alive" },
@@ -27,56 +26,71 @@ const genderFormControl = [
   { value: "Unknown", label: "Unknown" },
 ];
 
-const Filter = (props: FilterProps) => {
-  const changeHandler = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+const Filter = ({
+  setOpenDrawer,
+}: {
+  setOpenDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const { searchParams, setSearchParams } = useContext(SearchParams);
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value) {
-      props.searchParams.set(e.target.name, e.target.value);
-      props.setSearchParams(props.searchParams);
+      searchParams.set(e.target.name, e.target.value);
+      setSearchParams(searchParams);
     } else {
-      props.setSearchParams({});
+      setSearchParams({});
     }
   };
   const resetFiltersHandler = () => {
-    if (props.searchParams.get("name")) {
-      props.searchParams.delete("name");
+    if (searchParams.get("name")) {
+      searchParams.delete("name");
     }
-    if (props.searchParams.get("status")) {
-      props.searchParams.delete("status");
+    if (searchParams.get("status")) {
+      searchParams.delete("status");
     }
-    if (props.searchParams.get("gender")) {
-      props.searchParams.delete("gender");
+    if (searchParams.get("gender")) {
+      searchParams.delete("gender");
     }
-    props.setSearchParams(props.searchParams);
+    setSearchParams(searchParams);
   };
   return (
     <Box
       bgcolor={"#CCD1D9"}
       p={"20px"}
-      height={"100%"}
+      width="300px"
+      height={"auto"}
       display={"flex"}
       flexDirection={"column"}
       rowGap={"30px"}
     >
-      <Typography
+      <Box
         sx={{
-          fontSize: "30px",
-          textAlign: "center",
-          pb: "20px",
-          color: "#434A54",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
           borderBottom: "1px solid gray",
-          fontWeight: "900",
         }}
       >
-        Rick and Morty
-      </Typography>
+        <Typography
+          sx={{
+            fontSize: "30px",
+            textAlign: "center",
+            color: "#434A54",
+            fontWeight: "900",
+          }}
+        >
+          Rick and Morty
+        </Typography>
+        <IconButton onClick={() => setOpenDrawer(false)}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
       <Box>
         <FormLabel id="name" sx={{ color: "#434A54", fontWeight: "bold" }}>
           Name
         </FormLabel>
         <TextField
-          value={props.searchParams.get("name") || ""}
+          value={searchParams.get("name") || ""}
           onChange={changeHandler}
           name="name"
           aria-labelledby="name"
@@ -100,7 +114,7 @@ const Filter = (props: FilterProps) => {
               key={index}
               sx={{ height: "30px" }}
               value={item.value}
-              checked={props.searchParams.get("status") == item.value}
+              checked={searchParams.get("status") == item.value}
               control={<Radio size="small" />}
               label={item.label}
             />
@@ -121,7 +135,7 @@ const Filter = (props: FilterProps) => {
               key={index}
               sx={{ height: "30px" }}
               value={item.value}
-              checked={props.searchParams.get("gender") === item.value}
+              checked={searchParams.get("gender") === item.value}
               control={<Radio size="small" />}
               label={item.label}
             />
