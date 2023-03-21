@@ -12,12 +12,8 @@ const Favorite = ({
   const { state } = useContext(FavoriteContext);
   return (
     <Box
-      bgcolor={"#CCD1D9"}
       p={"20px"}
-      height={"auto"}
-      display={"flex"}
-      flexDirection={"column"}
-      rowGap={"30px"}
+      height="auto"
       width="270px"
     >
       <Stack
@@ -47,6 +43,7 @@ const Favorite = ({
           flexDirection="row"
           justifyContent={"start"}
           alignItems="center"
+          marginY={"20px"}
           sx={{
             backgroundColor: "#F5F7FA",
             borderRadius: "5px",

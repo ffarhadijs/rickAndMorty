@@ -54,10 +54,10 @@ const Filter = ({
   };
   return (
     <Box
-      bgcolor={"#CCD1D9"}
       p={"20px"}
       width="300px"
       height={"auto"}
+      minHeight={"100vh"}
       display={"flex"}
       flexDirection={"column"}
       rowGap={"30px"}
