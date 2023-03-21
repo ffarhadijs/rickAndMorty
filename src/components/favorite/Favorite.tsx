@@ -1,29 +1,45 @@
 import { FavoriteContext } from "../../contexts/FavoriteContext";
 import { useContext } from "react";
 import { Stack, Typography, Box } from "@mui/material";
-const Favorite = () => {
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+
+const Favorite = ({
+  setOpenFavoriteDrawer,
+}: {
+  setOpenFavoriteDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const { state } = useContext(FavoriteContext);
   return (
     <Box
       bgcolor={"#CCD1D9"}
       p={"20px"}
-      height={"100%"}
+      height={"auto"}
       display={"flex"}
       flexDirection={"column"}
       rowGap={"30px"}
+      width="270px"
     >
-      <Typography
-        sx={{
-          fontSize: "30px",
-          textAlign: "center",
-          pb: "20px",
-          color: "#434A54",
-          borderBottom: "1px solid gray",
-          fontWeight: "900",
-        }}
+      <Stack
+        flexDirection={"row-reverse"}
+        alignItems="center"
+        justifyContent={"start"}
+        sx={{ borderBottom: "1px solid gray", textAlign: "center" }}
       >
-        Favorites
-      </Typography>
+        <Typography
+          sx={{
+            fontSize: "30px",
+            color: "#434A54",
+            fontWeight: "900",
+            marginX: "auto",
+          }}
+        >
+          Favorites
+        </Typography>
+        <IconButton onClick={() => setOpenFavoriteDrawer(false)}>
+          <CloseIcon />
+        </IconButton>
+      </Stack>
       {state.favoriteList.map((item: any) => (
         <Stack
           key={item.id}
