@@ -1,31 +1,27 @@
-import { createContext, useReducer, useEffect } from "react";
+import { createContext, FC, useReducer } from "react";
 
-type FavoriteContextProviderProps = {
+interface FavoriteContextProviderProps {
   children: React.ReactNode;
-};
+}
 
-type FavortieListState = {
+interface FavortieListState {
   favoriteList: {
     id: number;
-    name: string;
   }[];
-};
+}
 
-type FavortieListAction = {
+interface FavortieListAction {
   type: string;
   payload: {
     id: number;
-    name: string;
   };
-};
-type FavoriteContext = {
+}
+interface FavoriteContext {
   state: FavortieListState;
   dispatch: React.Dispatch<FavortieListAction>;
-};
+}
 
-export const FavoriteContext = createContext<FavoriteContext>(
-  {} as FavoriteContext
-);
+export const FavoriteContext = createContext({} as FavoriteContext);
 
 const initialState = {
   favoriteList: [],
@@ -56,12 +52,14 @@ const reducer = (state: FavortieListState, action: FavortieListAction) => {
       return state;
   }
 };
-const FavoriteContextProvider = (props: FavoriteContextProviderProps) => {
+const FavoriteContextProvider: FC<FavoriteContextProviderProps> = ({
+  children,
+}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
     <FavoriteContext.Provider value={{ state, dispatch }}>
-      {props.children}
+      {children}
     </FavoriteContext.Provider>
   );
 };
